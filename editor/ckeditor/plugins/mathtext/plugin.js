@@ -15,7 +15,7 @@
       editor.addCommand('mtPrompt', {
         exec: function (editor) {
           var callbackFn = function (latex, editMode) {
-            if(editMode) {
+            if (editMode) {
               var selectedWidget = editor.widgets.selected[0];
               selectedWidget && editor.widgets.del(selectedWidget);
             }
@@ -26,7 +26,7 @@
           var selection = editor.getSelection();
           var selectedNode = selection.getSelectedElement();
           var isMathtext = selectedNode && selectedNode.hasClass('cke_widget_cmdMathText');
-          if(isMathtext) {
+          if (isMathtext) {
             var mathNode = selectedNode.find('.math-text').$[0];
             latex = mathNode.getAttribute('data-math');
             textSelected = true;
@@ -58,11 +58,16 @@
         }
       });
 
-      editor.on( 'doubleclick', function(e) {
+      editor.on('doubleclick', function (e) {
         var ClickedWidget = e.editor.widgets.focused;
         if (ClickedWidget != null && ClickedWidget.name === 'cmdMathText') {
           e.editor.execCommand('mtPrompt');
         }
+      });
+
+      // Disallow links to be pasted in content.
+      editor.on('paste', function (evt) {
+        evt.data.dataValue = evt.data.dataValue.replace(/<a[^>]*>|<\/a>/g, "");
       });
     },
 
