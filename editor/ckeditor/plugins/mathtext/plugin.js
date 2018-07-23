@@ -83,12 +83,12 @@
           'basicstyles',
           'bold',
           'italic',
-          'strike'
+          'strike',
+          'underline'
         ];
 
         var selection = evt.editor.getSelection();
         var selectedNode = selection.getSelectedElement();
-        console.log(selection); //TODO: Debug
 
         var isMathtext = selectedNode && (selectedNode.hasClass('cke_widget_cmdMathText') || selectedNode.find('.cke_widget_cmdMathText').$.length > 0);
         var containsMathtext = selection.getStartElement().find('.math-text').count() > 0;
