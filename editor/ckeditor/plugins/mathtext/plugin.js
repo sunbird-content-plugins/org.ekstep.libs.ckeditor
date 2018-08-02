@@ -42,7 +42,8 @@
         icon: this.path + 'icons/mathtext.png',
         command: 'mtPrompt',
         group: 'mathGroup',
-        toolbar: 'input'
+        toolbar: 'input',
+        title: 'Add Formula'
       });
 
       CKEDITOR.scriptLoader.load(editor.config.katexJS, function () {
