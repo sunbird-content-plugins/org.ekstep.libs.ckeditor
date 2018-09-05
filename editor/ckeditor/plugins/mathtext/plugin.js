@@ -65,6 +65,10 @@
         }
       });
 
+      editor.on('afterPaste', function (e) {
+        CKEDITOR.instances[e.editor.name].setData(e.editor.getData())
+      });
+
       // Disallow links to be pasted in content.
       editor.on('paste', function (evt) {
         evt.data.dataValue = evt.data.dataValue.replace(/<a[^>]*>|<\/a>/g, "");
