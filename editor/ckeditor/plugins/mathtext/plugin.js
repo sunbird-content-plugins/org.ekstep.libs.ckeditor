@@ -42,7 +42,8 @@
         icon: this.path + 'icons/mathtext.png',
         command: 'mtPrompt',
         group: 'mathGroup',
-        toolbar: 'input'
+        toolbar: 'input',
+        title: 'Add Formula'
       });
 
       CKEDITOR.scriptLoader.load(editor.config.katexJS, function () {
@@ -63,6 +64,10 @@
         if (ClickedWidget != null && ClickedWidget.name === 'cmdMathText') {
           e.editor.execCommand('mtPrompt');
         }
+      });
+
+      editor.on('afterPaste', function (e) {
+        CKEDITOR.instances[e.editor.name].setData(e.editor.getData())
       });
 
       // Disallow links to be pasted in content.
