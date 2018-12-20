@@ -14,14 +14,15 @@
       registerWidget(editor);
       editor.addCommand('mtPrompt', {
         exec: function (editor) {
-          var callbackFn = function (latex, editMode) {
-            if (editMode) {
+          var callbackFn = function (mathtextObj) {
+            if (mathtextObj.editMode) {
               var selectedWidget = editor.widgets.selected[0];
               selectedWidget && editor.widgets.del(selectedWidget);
             }
-            editor.execCommand('cmdMathText', {startupData: {math: latex}});
+            editor.execCommand('cmdMathText', {startupData: {math: mathtextObj.latex,advance: mathtextObj.advance}});
           };
           var latex = null;
+          var advance = null;
           var textSelected = false;
           var selection = editor.getSelection();
           var selectedNode = selection.getSelectedElement();
@@ -29,12 +30,14 @@
           if (isMathtext) {
             var mathNode = selectedNode.find('.math-text').$[0];
             latex = mathNode.getAttribute('data-math');
+            advance = mathNode.getAttribute('advance');
             textSelected = true;
           }
           ecEditor.dispatchEvent('org.ekstep.mathtext:showpopup', {
             callback: callbackFn,
             latex: latex,
-            textSelected: textSelected
+            textSelected: textSelected,
+            advance : advance
           });
         }
       });
@@ -135,6 +138,7 @@
       data: function () {
         if (this.element && this.element.find('.katex').count() <= 0) {
           this.element.setAttribute('data-math', this.data.math);
+          this.element.setAttribute('advance', this.data.advance);
           this.element.$.style += ';display:inline-block';
           this.element.appendHtml(katex.renderToString(this.data.math));
         }
@@ -161,6 +165,7 @@
 
         attrs['data-cke-survive'] = 1;
         attrs['data-math'] = data.math;
+        attrs['advance'] = data.advance;
 
         el.children[0].remove();
 
@@ -170,7 +175,6 @@
       // Downcasts to <pre><code [class="language-*"]>...</code></pre>
       downcast: function (el) {
         // var code = el.getFirst('code');
-
         var math = el.attributes['data-math'];
         math = math.replace(/\\/g, '\\\\');
         el.children[0].remove();
@@ -189,3 +193,4 @@
     });
   }
 })();
+//# sourceURL=ckeditormathtext.js
